@@ -1,0 +1,35 @@
+<nav class="navbar navbar-expand-lg bg-dark bg-body-tertiary" data-bs-theme="dark">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Timka Dev</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+          <a class="nav-link active" aria-current="page" href="{% url 'index' %}">Home</a>
+          <a class="nav-link" href="#">About</a>
+          <a class="nav-link" href="#">Contact</a>
+          {% if cats %}
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Kategoriyalar
+            </a>
+            <ul class="dropdown-menu">
+              {% for cat in cats %}
+              <li><a class="dropdown-item" href="{% url 'cat_detail' cat.slug %}">{{ cat.title }}</a></li>
+              {% endfor %}
+            </ul>
+          </li>
+          {% endif %}
+          <a class="nav-link" href="{% url 'add_user' %}">Add User</a>
+          <a class="nav-link" href="{% url 'add_book' %}">Add Book</a>
+          <a class="nav-link" href="{% url 'add_product' %}">Add Product</a>
+          <a class="nav-link" href="{% url 'add_order' %}">Add Order</a>
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+            <button class="btn btn-danger" type="submit">Search</button>
+          </form>
+        </div>
+      </div>
+    </div>
+</nav>

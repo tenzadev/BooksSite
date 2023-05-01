@@ -1,5 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
+from .forms import OrderForm
 
 
 def main_page(request: HttpRequest):
@@ -12,3 +13,13 @@ def about_page(request: HttpRequest):
 
 def contact_page(request: HttpRequest):
     return HttpResponse("<h1>Contact page</h1><a href='/about/'>About</a> <a href='/'>Home</a>")
+
+
+def add_order(request):
+    form = OrderForm()
+    if request.method == "POST":
+        form = OrderForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("index")
+    return render(request, "main/add_order.html", {"form": form})
