@@ -4,6 +4,7 @@ from .models import TGUser
 from main.models import Product, Category
 from main.forms import ProductForm
 from django.db.models import Q
+from django.contrib.auth.decorators import login_required
 
 
 def index(request, cat_slug=None):
@@ -16,7 +17,6 @@ def index(request, cat_slug=None):
         products = Product.objects.filter(
             Q(title__icontains=q) | Q(description__icontains=q)
         )
-        print(products)
     else:
         products = Product.objects.all()
     return render(request, "blog/index.html", {"products": products, "cats": cats})
@@ -25,6 +25,7 @@ def product_detail(request, pk):
     product = get_object_or_404(Product, id=pk)
     return render(request, "blog/product_detail.html", {"product": product})
 
+@login_required(login_url="/users/login/")
 def add_product(request):
     form = ProductForm()
     if request.method == "POST":
@@ -34,7 +35,7 @@ def add_product(request):
             return redirect('index')
     return render(request, "main/add_product.html", {"form": form})
 
-
+@login_required(login_url="/users/login/")
 def add_book(request):
     form = BookForm()
     if request.method == "POST":
@@ -47,7 +48,7 @@ def add_book(request):
             print(form.errors)
     return render(request, "blog/create.html", {"form": form})
 
-
+@login_required(login_url="/users/login/")
 def add_user(request):
     form = TGUserForm()
     if request.method == "POST":
@@ -64,7 +65,7 @@ def add_user(request):
             return redirect('index')
     return render(request, "blog/create_user.html", {"form": form})
 
-
+@login_required(login_url="/users/login/")
 def update_user(request, pk):
     user = TGUser.objects.get(id=pk)
     form = TGUserForm(instance=user)
@@ -76,7 +77,7 @@ def update_user(request, pk):
     return render(request, "blog/update_user.html", {"form": form})
 
 
-
+@login_required
 def delete_user(request, pk):
     user = TGUser.objects.get(id=pk)
     user.delete()
