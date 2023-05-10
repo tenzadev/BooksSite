@@ -45,7 +45,8 @@ INSTALLED_APPS = [
     # My_apps
     "main.apps.MainConfig",
     "blog.apps.BlogConfig",
-    "auth.apps.AuthConfig"
+    "auth.apps.AuthConfig",
+    "todo.apps.TodoConfig",
 ]
 
 MESSAGE_TAGS = {

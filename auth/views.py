@@ -12,6 +12,7 @@ from django.utils.encoding import force_bytes
 from django.http import HttpResponse
 
 
+# Function Based Views
 def register_user(request):
     form = NewUserCreationForm()
     if request.method == "POST":
