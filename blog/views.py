@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse
+from django.http import HttpResponseRedirect
 from .forms import BookForm, TGUserForm
 from .models import TGUser
-from main.models import Product, Category
-from main.forms import ProductForm
+from main.models import Product, Category, Comment
+from main.forms import ProductForm, CommentForm
 from django.db.models import Q
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import PageNotAnInteger, EmptyPage, Paginator
 
 
 def index(request, cat_slug=None):
@@ -19,11 +22,31 @@ def index(request, cat_slug=None):
         )
     else:
         products = Product.objects.all()
+
+    paginator = Paginator(products, 4)
+    page = request.GET.get('page')
+    try:
+        products = paginator.page(page)
+    except PageNotAnInteger:
+        products = paginator.page(1)
+    except EmptyPage:
+        products = paginator.page(paginator.num_pages)
     return render(request, "blog/index.html", {"products": products, "cats": cats})
 
 def product_detail(request, pk):
     product = get_object_or_404(Product, id=pk)
-    return render(request, "blog/product_detail.html", {"product": product})
+    if request.method == "POST":
+        # body = request.POST.get('body')
+        # print(request.POST)
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.author = request.user
+            comment.product = product
+            comment.save()
+            return HttpResponseRedirect(reverse('product_detail', kwargs={'pk': pk}))
+    comments = Comment.objects.filter(product=product)
+    return render(request, "blog/product_detail.html", {"product": product, "comments": comments})
 
 @login_required(login_url="/users/login/")
 def add_product(request):

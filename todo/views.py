@@ -12,9 +12,10 @@ class TasksListView(LoginRequiredMixin, ListView):
     login_url = '/users/login/'
     template_name = 'task/list.html'
     context_object_name = 'tasks'
+    paginate_by = 3
     
     def get_queryset(self):
-        return Task.objects.filter(author = self.request.user)
+        return Task.objects.filter(author = self.request.user).order_by('-id')
 
 
 class TaskCreateView(LoginRequiredMixin, CreateView):

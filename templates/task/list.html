@@ -33,6 +33,9 @@
             </tbody>
         </table>
         <a href="{% url 'task-create' %}" class="btn btn-primary">+ Add Task</a>
+        <div>
+          {% include 'pagination.html' with page=page_obj %}
+        </div>
     </div>
   </div>
 </div>

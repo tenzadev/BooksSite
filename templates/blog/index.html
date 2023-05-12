@@ -22,6 +22,9 @@
         </div>
       </div>
     {% endfor %}
+    <div>
+      {% include 'pagination.html' with page=products %}
+    </div>
   </div>
 </div>
 {% endblock content %}
