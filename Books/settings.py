@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "rest_framework",
+    "drf_spectacular",
     "phonenumber_field",
     "crispy_forms",
     "crispy_bootstrap5",
@@ -49,7 +51,30 @@ INSTALLED_APPS = [
     "blog.apps.BlogConfig",
     "auth.apps.AuthConfig",
     "todo.apps.TodoConfig",
+    "api.apps.ApiConfig"
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '10/min',
+        'user': '100/min'
+    },
+    # 'DEFAULT_PAGINATION_CLASS': 'api.paginations.CustomPagination',
+    # 'PAGE_SIZE': 3,
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'My Project API',
+    'DESCRIPTION': 'My project description',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False
+}
 
 MESSAGE_TAGS = {
     messages.DEBUG: 'alert-secondary',
